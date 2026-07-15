@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Detail Sosmas | BEM KM UNMUL</title>
+    <link rel="icon" href="../../images/emas.png" />
+    <link rel="stylesheet" href="../../css/global.css" />
+    <link rel="stylesheet" href="../../css/pages/kementerian/detail.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+      .hero-detail { background: url("../../images/sosmas.png") center/cover no-repeat; }
+    </style>
+  </head>
+
+  <body>
+    <div id="app">
+
+      <!-- SPLASH -->
+      <div id="splash" :class="{ 'hide-splash': isLoaded }">
+        <div class="glow glow1"></div>
+        <div class="glow glow2"></div>
+        <img src="../../images/emas.png" alt="Logo Splash" />
+        <div class="splash-title">BEM KM UNMUL</div>
+        <h2 class="loading-text">
+          <span v-for="(char, i) in 'Metamorfosa'" :key="i" :style="{ animationDelay: (i * 0.09) + 's' }">{{ char }}</span>
+        </h2>
+        <div class="progress-wrapper">
+          <div class="loader"><span :style="{ width: progress + '%' }"></span></div>
+          <div class="progress-text"><span>{{ progress }}</span>%</div>
+        </div>
+      </div>
+
+      <!-- MOBILE MENU -->
+      <div class="mobile-menu" :class="{ open: isMobileMenuOpen }">
+        <a href="../../index.html"      @click="isMobileMenuOpen = false">Beranda</a>
+        <a href="../profil.html"     @click="isMobileMenuOpen = false">Profil</a>
+        <a href="../kementerian.html"@click="isMobileMenuOpen = false">Struktur</a>
+        <a href="https://linktr.ee/bemkm_unmul" target="_blank" @click="isMobileMenuOpen = false">Layanan</a>
+      </div>
+
+      <!-- NAVBAR -->
+      <nav :class="{ shrink: isNavShrunk }">
+        <div class="nav-left">
+          <img src="../../images/emas.png" alt="Logo Nav" />
+        </div>
+        <div class="nav-links">
+          <a href="../../index.html">Beranda</a>
+          <a href="../profil.html">Profil</a>
+          <a href="../kementerian.html">Struktur</a>
+        </div>
+        <div class="nav-right">
+          <a href="https://linktr.ee/bemkm_unmul" target="_blank" rel="noopener noreferrer" class="nav-layanan">Layanan</a>
+        </div>
+        <div class="nav-hamburger" :class="{ open: isMobileMenuOpen }" @click="isMobileMenuOpen = !isMobileMenuOpen">
+          <span></span><span></span><span></span>
+        </div>
+      </nav>
+
+      <!-- HERO -->
+      <section class="hero-detail">
+        <div class="hero-content-inner">
+          <div class="hero-eyebrow">Kementerian</div>
+          <h1>Sosial Masyarakat</h1>
+        </div>
+      </section>
+
+      <!-- ABOUT -->
+      <section>
+        <div class="about-wrap" data-aos="fade-up">
+          <div class="about-glass">
+            <p>
+                Kementerian Sosial Masyarakat bertanggung jawab dalam perencanaan, pengelolaan,
+                dan pelaksanaan program sosial yang berorientasi pada pengabdian, pemberdayaan,
+                serta respons terhadap isu-isu kemanusiaan. Kementerian ini menjadi representasi
+                kepedulian BEM KM UNMUL dalam menjembatani hubungan antara mahasiswa dan
+                masyarakat.
+                Sebagai bagian dari aktualisasi Tridharma Perguruan Tinggi, khususnya pada aspek
+                pengabdian kepada masyarakat, Kementerian Sosial Masyarakat hadir tidak hanya
+                sebagai pelaksana aksi sosial, tetapi juga sebagai penggerak perubahan yang solutif,
+                partisipatif, dan berkelanjutan. Melalui pendekatan kolaboratif dan berbasis
+                kebutuhan masyarakat, kementerian ini mendorong transformasi sosial yang
+                berdampak nyata.
+                Kementerian Sosial Masyarakat berkomitmen menjadikan gerakan sosial bukan
+                sekadar kegiatan seremonial, melainkan sebagai ruang keberpihakan yang konkret,
+                terukur, dan berkelanjutan demi terwujudnya peran mahasiswa sebagai agen
+                perubahan di tengah masyarakat.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- FOTO LAUNCHING -->
+      <section class="highlight-section">
+        <div class="section-header" data-aos="fade-up">
+          <div class="section-label">Struktur Anggota</div>
+          <h2 class="section-title">Foto Launching</h2>
+          <div class="section-divider"></div>
+        </div>
+
+        <div class="highlight-wrapper" data-aos="fade-up" data-aos-delay="100">
+          <button class="slider-nav-btn left" @click="slideHighlight(-1)">
+            <i class="fa-solid fa-chevron-left"></i>
+          </button>
+
+          <div class="highlight-slider" id="highlightSlider" @scroll="updateActiveHighlight">
+            <div v-for="(img, i) in highlightImgs" :key="i"
+                :class="['highlight-card', { active: activeHighlight === i }]">
+              <img :src="img.src" :alt="img.alt" class="highlight-card-image"
+                  @error="e => e.target.src='../../images/emas.png'" />
+            </div>
+          </div>
+
+          <button class="slider-nav-btn right" @click="slideHighlight(1)">
+            <i class="fa-solid fa-chevron-right"></i>
+          </button>
+        </div>
+      </section>
+
+      <!-- FOOTER -->
+      <footer>
+        <img src="../../images/emas.png" alt="Logo" class="footer-logo" />
+        <div class="footer-text">BEM KM UNMUL 2026/2027 • KABINET METAMORFOSA</div>
+        <div class="socials">
+          <div class="social-item">
+            <a href="https://www.instagram.com/bemkm_unmul?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-instagram"></i></a>
+            <div class="tooltip">Instagram</div>
+          </div>
+          <div class="social-item">
+            <a href="https://www.youtube.com/@BEMKMUNMUL" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-youtube"></i></a>
+            <div class="tooltip">YouTube</div>
+          </div>
+          <div class="social-item">
+            <a href="https://web.facebook.com/bemkmunmul?_rdc=1&_rdr#" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-facebook-f"></i></a>
+            <div class="tooltip">Facebook</div>
+          </div>
+          <div class="social-item">
+            <a href="https://www.tiktok.com/@bemkm_unmul?is_from_webapp=1&sender_device=pc" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-tiktok"></i></a>
+            <div class="tooltip">Tiktok</div>
+          </div>
+        </div>
+      </footer>
+
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="../../js/global.js"></script>
+    <script src="../../js/pages/kementerian/detail-kementerian.js"></script>
+  </body>
+</html>

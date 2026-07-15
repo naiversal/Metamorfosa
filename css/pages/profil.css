@@ -1,0 +1,1347 @@
+/* ═══════════════════════════════════════════════════════════
+   profil.css — BEM KM UNMUL | Kabinet Metamorfosa
+   ───────────────────────────────────────────────────────────
+   OPTIMASI:
+   1. Splash: keluar via opacity+scale+blur untuk feel cinematic
+   2. Hero: parallax orbs ringan (CSS transform), grid animate
+   3. Image crossfade: Vue <Transition name="img-crossfade">
+   4. Philosophy mobile: sticky band terbatas, tidak memakan layar
+   5. Misi grid: 3 col → 2 col (1024px) → 1 col (768px)
+   6. Footer socials: glow hover + tooltip animate
+   7. Semua animasi pakai will-change + GPU-safe properties
+      (transform, opacity) untuk 60/90/120 Hz devices
+   ═══════════════════════════════════════════════════════════ */
+
+/* ─────────────────────────────────────────────────────────
+   SPLASH SCREEN
+   Keluar: opacity 0 + scale(1.04) + blur(8px) untuk feel
+   seperti "melompat ke dalam" halaman, bukan sekadar hilang
+───────────────────────────────────────────────────────────── */
+#splash {
+  position: fixed;
+  inset: 0;
+  background: #080808;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  z-index: 9999;
+  /* Keluar dengan tiga properti sekaligus: opacity, scale, blur */
+  transition:
+    opacity    0.8s cubic-bezier(0.4, 0, 0.2, 1),
+    transform  0.8s cubic-bezier(0.4, 0, 0.2, 1),
+    filter     0.8s cubic-bezier(0.4, 0, 0.2, 1),
+    visibility 0.8s step-end;
+  transform-origin: center center;
+  will-change: opacity, transform, filter;
+}
+
+/* Triggered by Vue when isLoaded = true */
+#splash.hide-splash {
+  opacity:    0;
+  transform:  scale(1.05);
+  filter:     blur(6px);
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Ambient glow orbs */
+.glow {
+  position: absolute;
+  width: 480px;
+  height: 480px;
+  background: var(--gold, #ffbc00);
+  border-radius: 50%;
+  filter: blur(190px);
+  opacity: 0.1;
+  will-change: transform;
+  animation: moveGlow 14s ease-in-out infinite alternate;
+}
+.glow1 { top: -180px; left: -180px; }
+.glow2 { bottom: -180px; right: -180px; animation-delay: 5s; }
+
+@keyframes moveGlow {
+  from { transform: translate(0, 0) scale(1); }
+  to   { transform: translate(60px, 50px) scale(1.18); }
+}
+
+/* Floating micro-particles (decorative, CSS-only) */
+.splash-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.splash-particle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--gold, #ffbc00);
+  opacity: 0;
+  animation: particlePop 3.5s ease-out infinite;
+  animation-delay: var(--delay, 0s);
+  transform: translate(var(--x, 0px), var(--y, 0px));
+}
+@keyframes particlePop {
+  0%   { opacity: 0;   transform: translate(0, 0) scale(0);   }
+  20%  { opacity: 0.5; transform: translate(var(--x), var(--y)) scale(1.2); }
+  100% { opacity: 0;   transform: translate(calc(var(--x) * 2.4), calc(var(--y) * 2.4)) scale(0.4); }
+}
+
+/* Logo */
+#splash img {
+  width: 84px;
+  margin-bottom: 26px;
+  position: relative;
+  z-index: 2;
+  animation: floatLogo 3.6s ease-in-out infinite;
+  filter: drop-shadow(0 0 28px rgba(255, 188, 0, 0.45));
+  will-change: transform;
+}
+@keyframes floatLogo {
+  0%, 100% { transform: translateY(0)     rotate(0deg); }
+  33%       { transform: translateY(-12px) rotate(1.5deg); }
+  66%       { transform: translateY(-6px)  rotate(-1deg); }
+}
+
+/* Kabinet label */
+.splash-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 8px;
+  color: var(--gold, #ffbc00);
+  text-transform: uppercase;
+  opacity: 0.88;
+  z-index: 2;
+  margin-bottom: 6px;
+  position: relative;
+}
+
+/* Letter-by-letter "Metamorfosa" */
+.loading-text {
+  margin-top: 4px;
+  letter-spacing: 3px;
+  font-size: 11px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.35);
+  display: flex;
+  gap: 1px;
+  text-transform: uppercase;
+  z-index: 2;
+  position: relative;
+}
+.loading-text span {
+  display: inline-block;
+  opacity: 0.2;
+  animation: letterBounce 1.8s ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+}
+@keyframes letterBounce {
+  0%,  80%, 100% { opacity: 0.2; transform: translateY(0);    }
+  40%             { opacity: 1;   transform: translateY(-5px); }
+}
+
+/* Progress bar */
+.progress-wrapper {
+  margin-top: 30px;
+  width: 200px;
+  text-align: center;
+  z-index: 2;
+  position: relative;
+}
+.loader {
+  width: 100%;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 20px;
+  overflow: hidden;
+}
+.loader span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #ffbc00, #ffe680);
+  border-radius: 20px;
+  transition: width 0.1s linear;
+  box-shadow: 0 0 10px rgba(255, 188, 0, 0.6);
+  will-change: width;
+}
+.progress-text {
+  margin-top: 10px;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: rgba(255, 255, 255, 0.28);
+}
+
+
+/* ─────────────────────────────────────────────────────────
+   HERO SECTION
+───────────────────────────────────────────────────────────── */
+.hero {
+  min-height: 82vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  padding-top: 80px;
+}
+
+/* Radial ambient glow (static) */
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 80% 60% at 50% 0%,
+    rgba(255, 188, 0, 0.08) 0%,
+    transparent 70%
+  );
+  /* Subtle breathing animation */
+  animation: heroBgPulse 8s ease-in-out infinite alternate;
+  will-change: opacity;
+}
+@keyframes heroBgPulse {
+  from { opacity: 0.85; }
+  to   { opacity: 1.0;  }
+}
+
+/* Grid lines */
+.hero-lines {
+  position: absolute;
+  inset: 0;
+  /* grid removed to keep hero imagery clean */
+  background: transparent;
+  pointer-events: none;
+}
+@keyframes gridDrift {
+  from { background-position: 0 0, 0 0; }
+  to   { background-position: 60px 60px, 60px 60px; }
+}
+
+/* Floating orbs — GPU-only: transform + opacity */
+.hero-orb {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+.hero-orb-1 {
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, rgba(255,188,0,0.05) 0%, transparent 70%);
+  top: -80px;
+  right: 10%;
+  animation: orbFloat1 12s ease-in-out infinite alternate;
+}
+.hero-orb-2 {
+  width: 250px;
+  height: 250px;
+  background: radial-gradient(circle, rgba(255,188,0,0.04) 0%, transparent 70%);
+  bottom: 10%;
+  left: 8%;
+  animation: orbFloat2 15s ease-in-out infinite alternate;
+}
+@keyframes orbFloat1 {
+  from { transform: translate(0, 0)      scale(1);    opacity: 0.6; }
+  to   { transform: translate(-30px, 20px) scale(1.1); opacity: 1;   }
+}
+@keyframes orbFloat2 {
+  from { transform: translate(0, 0)     scale(0.95); opacity: 0.4; }
+  to   { transform: translate(20px, -15px) scale(1.05); opacity: 0.8; }
+}
+
+/* Content */
+.hero-content {
+  position: relative;
+  z-index: 2;
+  padding: 0 20px;
+}
+
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--gold, #ffbc00);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+  opacity: 0;
+  animation: fadeInUp 0.8s ease 0.2s forwards;
+}
+.hero-eyebrow::before,
+.hero-eyebrow::after {
+  content: '';
+  width: 30px;
+  height: 1px;
+  background: var(--gold, #ffbc00);
+  opacity: 0.5;
+}
+
+.hero h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(48px, 9vw, 100px);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -1px;
+  color: white;
+  opacity: 0;
+  animation: fadeInUp 0.9s ease 0.4s forwards;
+}
+.hero h1 em {
+  font-style: italic;
+  color: var(--gold, #ffbc00);
+}
+
+.hero-sub {
+  margin: 20px auto 0;
+  font-size: clamp(13px, 2vw, 15px);
+  color: var(--text-muted, rgba(255,255,255,0.5));
+  letter-spacing: 0.5px;
+  max-width: 480px;
+  line-height: 1.7;
+  opacity: 0;
+  animation: fadeInUp 0.9s ease 0.6s forwards;
+}
+
+.hero-scroll {
+  margin-top: 52px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  opacity: 0;
+  animation: fadeInUp 0.9s ease 0.9s forwards;
+  color: var(--text-muted, rgba(255,255,255,0.5));
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+.hero-scroll-line {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, var(--gold, #ffbc00), transparent);
+  animation: scrollPulse 2.2s ease-in-out infinite;
+  will-change: opacity, transform;
+}
+
+/* ─── Base keyframes ─── */
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.35; transform: scaleY(0.75); }
+  50%       { opacity: 1;    transform: scaleY(1);    }
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+@keyframes rotateSlow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+
+/* ─────────────────────────────────────────────────────────
+   ABOUT SECTION
+───────────────────────────────────────────────────────────── */
+.about-section {
+  padding: 100px 5%;
+  position: relative;
+  overflow: hidden;
+}
+.about-section::before {
+  content: '';
+  position: absolute;
+  left: -200px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(255,188,0,0.04) 0%, transparent 70%);
+  pointer-events: none;
+}
+.about-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--gold, #ffbc00);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.section-label::before {
+  content: '';
+  width: 20px;
+  height: 1px;
+  background: var(--gold, #ffbc00);
+}
+.about-header {
+  text-align: center;
+  margin-bottom: 80px;
+}
+.about-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(36px, 6vw, 64px);
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: white;
+  line-height: 1.05;
+}
+.about-description {
+  color: var(--text-muted, rgba(255,255,255,0.5));
+  font-size: 15px;
+  line-height: 1.85;
+  max-width: 560px;
+  margin: 0 auto;
+}
+.about-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.about-card {
+  background: rgba(15,15,15,0.8);
+  border: 1px solid var(--border, rgba(255,188,0,0.1));
+  border-radius: 20px;
+  padding: 40px 32px;
+  transition: transform 0.4s cubic-bezier(0.4,0,0.2,1),
+              border-color 0.4s ease,
+              box-shadow 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+.about-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold, #ffbc00), transparent);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.about-card:hover {
+  transform: translateY(-8px);
+  border-color: var(--border-hover, rgba(255,188,0,0.38));
+  box-shadow: 0 24px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,188,0,0.12);
+}
+.about-card:hover::after { opacity: 1; }
+.about-card-icon {
+  width: 48px;
+  height: 48px;
+  background: rgba(255,188,0,0.1);
+  border: 1px solid rgba(255,188,0,0.3);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gold, #ffbc00);
+  font-size: 18px;
+  margin-bottom: 24px;
+  transition: background 0.3s ease, color 0.3s ease, transform 0.3s ease;
+}
+.about-card:hover .about-card-icon {
+  background: var(--gold, #ffbc00);
+  color: #0d0d0d;
+  transform: scale(1.1) rotate(-5deg);
+}
+.about-card h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 12px;
+  letter-spacing: 0.3px;
+}
+.about-card p {
+  color: var(--text-muted, rgba(255,255,255,0.5));
+  font-size: 14px;
+  line-height: 1.75;
+}
+
+
+/* ─────────────────────────────────────────────────────────
+   FILOSOFI LOGO SECTION
+───────────────────────────────────────────────────────────── */
+.philosophy-wrapper {
+  padding: 60px 5% 120px;
+  position: relative;
+}
+.philosophy-header {
+  max-width: 1200px;
+  margin: 0 auto 80px;
+  text-align: center;
+}
+.philosophy-header h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(32px, 5vw, 56px);
+  font-weight: 700;
+  color: white;
+  line-height: 1.1;
+}
+.philosophy-section {
+  display: flex;
+  gap: 80px;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  align-items: flex-start;
+}
+
+/* TEXT COLUMN */
+.text-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 70vh;
+  padding-bottom: 50vh;
+}
+.desc-item {
+  transition: opacity 0.55s cubic-bezier(0.4,0,0.2,1),
+              transform 0.55s cubic-bezier(0.4,0,0.2,1),
+              border-color 0.4s ease,
+              background 0.4s ease;
+  opacity: 0.18;
+  transform: translateX(-16px);
+  padding: 36px 32px;
+  border-left: 2px solid transparent;
+  border-radius: 0 16px 16px 0;
+  background: transparent;
+}
+.desc-item.active-text {
+  opacity: 1;
+  transform: translateX(0);
+  border-left-color: var(--gold, #ffbc00);
+  background: rgba(255, 188, 0, 0.03);
+}
+.desc-item h3 {
+  font-family: 'Cormorant Garamond', serif;
+  color: white;
+  font-size: clamp(22px, 3.5vw, 32px);
+  margin-bottom: 14px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+.desc-item p {
+  font-size: 14px;
+  line-height: 1.85;
+  color: var(--text-muted, rgba(255,255,255,0.5));
+}
+
+/* IMAGE COLUMN */
+.image-column {
+  flex: 1.1;
+  position: sticky;
+  top: 130px;
+  height: 65vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  will-change: contents;
+}
+.sticky-img-container {
+  position: relative;
+  width: 50%;
+  max-width: 460px;
+}
+.sticky-img-container::before {
+  content: '';
+  position: absolute;
+  inset: -80px;
+  border-radius: 100%;
+  border: 1px solid rgba(255,188,0,0.1);
+  opacity: 0.6;
+  animation: rotateSlow 22s linear infinite;
+  will-change: transform;
+}
+.sticky-img-container::after {
+  content: '';
+  position: absolute;
+  inset: -50px;
+  border-radius: 100%;
+  border: 1px dashed rgba(255,188,0,0.05);
+  animation: rotateSlow 60s linear infinite reverse;
+  will-change: transform;
+}
+.img-glow {
+  position: absolute;
+  inset: -165px;
+  background: radial-gradient(circle, rgba(255,188,0,0.14) 0%, transparent 55%);
+  border-radius: 100%;
+  pointer-events: none;
+}
+.sticky-img-container img {
+  width: 100%;
+  position: relative;
+  z-index: 2;
+  filter: drop-shadow(0 0 36px rgba(255,188,0,0.14));
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* ─────────────────────────────────────────────────────────
+   IMAGE CROSSFADE — Vue <Transition name="img-crossfade">
+   ─────────────────────────────────────────────────────────
+   Vue inserts:
+     .img-crossfade-enter-from  → before enter anim starts
+     .img-crossfade-enter-active → during enter (apply transition)
+     .img-crossfade-enter-to    → final enter state
+     .img-crossfade-leave-from  → before leave anim starts
+     .img-crossfade-leave-active → during leave
+     .img-crossfade-leave-to    → final leave state
+
+   Using mode="out-in": old image fully leaves BEFORE
+   new image enters → zero overlap, clean crossfade.
+   Duration matched to 300ms for snappy but smooth feel.
+───────────────────────────────────────────────────────────── */
+.img-crossfade-enter-active {
+  transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  will-change: opacity, transform;
+}
+.img-crossfade-leave-active {
+  transition: opacity 0.22s ease, transform 0.22s ease;
+  will-change: opacity, transform;
+}
+
+.img-crossfade-enter-from {
+  opacity: 0;
+  transform: scale(0.9) translateY(10px);
+}
+.img-crossfade-enter-to {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+
+.img-crossfade-leave-from {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+.img-crossfade-leave-to {
+  opacity: 0;
+  transform: scale(0.94) translateY(-6px);
+}
+
+/* Progress dots */
+
+
+/* ─────────────────────────────────────────────────────────
+   VISI MISI SECTION
+───────────────────────────────────────────────────────────── */
+.visimisi-container {
+  padding: 60px 5% 120px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.section-divider {
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(90deg, var(--gold, #ffbc00), transparent);
+  margin: 16px auto 0;
+}
+.visimisi-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(32px, 5vw, 54px);
+  color: white;
+  text-align: center;
+  margin-bottom: 48px;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+/* Visi */
+.visi-card {
+  background: rgba(12,12,12,0.85);
+  border: 1px solid var(--border, rgba(255,188,0,0.1));
+  border-radius: 24px;
+  padding: 56px 60px;
+  text-align: center;
+  max-width: 860px;
+  margin: 0 auto 100px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.4s ease, box-shadow 0.4s ease, transform 0.4s ease;
+}
+.visi-card::before {
+  content: '\201C';
+  position: absolute;
+  top: -10px; left: 40px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 180px;
+  color: var(--gold, #ffbc00);
+  opacity: 0.055;
+  line-height: 1;
+  pointer-events: none;
+}
+.visi-card:hover {
+  border-color: rgba(255,188,0,0.35);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  transform: translateY(-3px);
+}
+.visi-card p {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(17px, 2.5vw, 22px);
+  line-height: 1.75;
+  font-style: italic;
+  color: rgba(255,255,255,0.85);
+  position: relative;
+  z-index: 1;
+  font-weight: 500;
+}
+
+/* Misi */
+.misi-wrapper { margin-top: 20px; }
+.misi-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.misi-card {
+  background: rgba(12,12,12,0.78);
+  border: 1px solid rgba(255,255,255,0.04);
+  border-radius: 16px;
+  padding: 32px 28px;
+  position: relative;
+  overflow: hidden;
+  transform: translateZ(0);
+  will-change: transform;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+.misi-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--gold, #ffbc00), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.misi-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(255,188,0,0.2);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+  cursor: default;
+}
+.misi-card:hover::before { opacity: 1; }
+.misi-number {
+  font-size: 42px;
+  font-family: 'Cormorant Garamond', serif;
+  color: rgba(255,188,0,0.07);
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 12px;
+  transition: color 0.3s ease;
+}
+.misi-card:hover .misi-number { color: rgba(255,188,0,0.15); }
+.misi-header { margin-bottom: 14px; }
+.misi-header h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  color: var(--gold, #ffbc00);
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+.misi-card p {
+  font-size: 12px;
+  color: var(--text-muted, rgba(255,255,255,0.5));
+  line-height: 1.7;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+
+/* ─────────────────────────────────────────────────────────
+   FOOTER
+───────────────────────────────────────────────────────────── */
+footer {
+  background: #070707;
+  padding: 60px 5%;
+  text-align: center;
+  border-top: 1px solid rgba(255,255,255,0.04);
+  position: relative;
+}
+footer::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 50%; transform: translateX(-50%);
+  width: 300px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold, #ffbc00), transparent);
+  opacity: 0.35;
+}
+.footer-logo {
+  width: 36px;
+  display: block;
+  margin: 0 auto 18px;
+  opacity: 0.45;
+  filter: grayscale(1);
+  transition: opacity 0.4s ease, filter 0.4s ease;
+}
+footer:hover .footer-logo {
+  opacity: 0.9;
+  filter: none;
+}
+.footer-text {
+  font-size: 10px;
+  color: rgba(255,255,255,0.22);
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  margin-bottom: 26px;
+}
+
+/* Social icons */
+.socials {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+.social-item {
+  position: relative;
+}
+.social-item a {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: rgba(255,255,255,0.38);
+  font-size: 14px;
+  transition: background 0.3s ease, color 0.3s ease,
+              border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+.social-item a:hover {
+  background: var(--gold, #ffbc00);
+  color: #0d0d0d;
+  border-color: var(--gold, #ffbc00);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(255,188,0,0.28);
+}
+/* Tailwind-style focus ring for a11y */
+.social-item a:focus-visible {
+  outline: 2px solid var(--gold, #ffbc00);
+  outline-offset: 3px;
+}
+
+/* Tooltip */
+.tooltip {
+  position: absolute;
+  bottom: 54px;
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background: rgba(18,18,18,0.95);
+  border: 1px solid rgba(255,188,0,0.15);
+  color: var(--gold, #ffbc00);
+  padding: 4px 12px;
+  border-radius: 8px;
+  font-size: 10px;
+  letter-spacing: 0.5px;
+  opacity: 0;
+  pointer-events: none;
+  white-space: nowrap;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.social-item:hover .tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   RESPONSIVE
+   Strategy:
+   1200px → reduce philosophy gap, shrink image
+   1024px → 2-col about cards & misi grid
+   768px  → flip philosophy layout (image top, text below)
+            image becomes relative (not sticky) with fixed band
+   640px  → tighten all spacing
+   480px  → micro adjustments
+   360px  → minimum viable layout (small Android)
+═══════════════════════════════════════════════════════════ */
+
+@media (max-width: 1200px) {
+  .philosophy-section { gap: 60px; }
+  .sticky-img-container { width: 45%; }
+}
+
+@media (max-width: 1024px) {
+  .about-cards { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .misi-grid   { grid-template-columns: repeat(2, 1fr); }
+  .philosophy-section { gap: 50px; }
+  .text-column { gap: 50vh; }
+  .philosophy-dots { left: -20px; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   MOBILE PHILOSOPHY — REVEAL CARD SYSTEM
+   ───────────────────────────────────────────────────────────
+   KONSEP:
+   Setiap .desc-item di mobile menjadi card mandiri yang utuh
+   (teks + gambar dalam satu unit). Saat tiap card masuk viewport
+   → reveal animasi dari bawah. Tidak ada sticky image,
+   tidak ada bug tumpang tindih.
+
+   Layout per card:
+   ┌─────────────────────────────────────┐
+   │  [nomor]  ────────────────────────  │
+   │                                     │
+   │         [   image   ]               │
+   │                                     │
+   │  Judul                              │
+   │  Deskripsi teks...                  │
+   │                                     │
+   │  ──────────── gold line ──────────  │
+   └─────────────────────────────────────┘
+
+   Kelas khusus mobile:
+   .desc-item--mobile-card   → wrapper card lengkap
+   .desc-item--mobile-img    → gambar dalam card
+   .m-card-img-ring          → ring dekoratif dalam card
+   .m-card-seq               → nomor urut
+   .m-card-divider           → garis pemisah bawah card
+   ═══════════════════════════════════════════════════════════ */
+
+/* ─── BASE MOBILE CARD (hidden by default, shown only ≤768px) ─── */
+.desc-item__mobile-img-wrap { display: none; }
+.m-card-seq                 { display: none; }
+.m-card-divider             { display: none; }
+
+/* ─────────────────────────────────────────────────────────────────
+   TABLET / MOBILE BREAKPOINT (≤768px)
+   Overrides ALL philosophy desktop styles.
+   desktop: .image-column sticky + .text-column gap 70vh
+   mobile:  pure linear card list, no sticky, no gap tricks
+─────────────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+
+  /* ── Non-philosophy overrides ── */
+  .hero { min-height: 75vh; padding-top: 70px; }
+  .hero h1 { font-size: clamp(36px, 8vw, 60px); letter-spacing: -0.5px; }
+  .hero-eyebrow { font-size: 10px; letter-spacing: 3px; margin-bottom: 16px; gap: 8px; }
+  .hero-eyebrow::before, .hero-eyebrow::after { width: 24px; }
+  .hero-sub { font-size: clamp(12px, 1.8vw, 14px); max-width: 90%; line-height: 1.6; }
+  .hero-orb { display: none; }
+
+  .about-section { padding: 60px 5% 80px; }
+  .about-header  { margin-bottom: 45px; }
+  .about-title   { font-size: clamp(28px, 5vw, 48px); margin-bottom: 16px; letter-spacing: -0.5px; }
+  .about-description { font-size: 14px; max-width: 100%; }
+  .about-cards { grid-template-columns: 1fr; gap: 16px; }
+  .about-card  { padding: 32px 26px; border-radius: 16px; }
+  .about-card:hover { transform: translateY(-6px); }
+  .about-card-icon { width: 44px; height: 44px; font-size: 16px; margin-bottom: 20px; }
+  .about-card h3 { font-size: 18px; }
+  .about-card p  { font-size: 13px; line-height: 1.7; }
+
+  /* ──────────────────────────────────────────────────────────
+     PHILOSOPHY SECTION — CARD MODE
+     Matikan sepenuhnya: sticky image column, gap trick,
+     dan mask-image. Ganti dengan card list vertikal.
+  ─────────────────────────────────────────────────────────── */
+  .philosophy-wrapper {
+    padding: 48px 0 72px;  /* full-width, padding per-card */
+  }
+  .philosophy-header {
+    margin: 0 auto 52px;
+    max-width: 100%;
+    text-align: center;
+  }
+  .philosophy-header h2 {
+    font-size: clamp(26px, 6vw, 44px);
+    margin-bottom: 0;
+    line-height: 1.05;
+  }
+  .philosophy-dots { display: none; }
+
+  /* Wrapper flex → column list */
+  .philosophy-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;           /* add vertical spacing between mobile cards */
+    max-width: 100%;
+    position: static;   /* CRUCIAL — remove relative that traps sticky children */
+    align-items: stretch;
+    padding-bottom: 80px;
+  }
+
+  .desc-item {
+    margin-bottom: 22px;
+  }
+  .desc-item:last-child {
+    margin-bottom: 0;
+  }
+
+  /* ── Desktop image column: completely hidden ── */
+  .image-column { display: none !important; }
+
+  /* ── text-column becomes a plain flex stack ── */
+  .text-column {
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+    padding-bottom: 0;
+    width: 100%;
+    order: unset;
+    position: static;
+  }
+
+  /* ══════════════════════════════════════════════
+     .desc-item → REVEAL CARD (mobile-only)
+     Setiap card:
+     - Full width, border kiri gold (aktif)
+     - Gambar di dalam card (via .desc-item__mobile-img-wrap)
+     - Step number kecil di atas
+     - Garis emas tipis di bawah setiap card
+  ══════════════════════════════════════════════ */
+  .desc-item {
+    /* Reset semua desktop styles */
+    opacity: 1;
+    transform: none;
+    border-left: none;
+    border-radius: 28px;
+    background: rgba(255,255,255,0.02);
+    padding: 0;
+    text-align: left;
+    transition: none;
+
+    /* Card layout */
+    display: grid;
+    grid-template-columns: 1fr;
+    position: relative;
+    overflow: visible;
+
+    /* Reveal animation — dari bawah + fade */
+    animation: mobileCardReveal 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-play-state: paused;  /* dijalankan via .active-text */
+  }
+
+  /* Card reveal keyframe */
+  @keyframes mobileCardReveal {
+    from {
+      opacity: 0;
+      transform: translateY(28px);
+      filter: blur(2px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+      filter: blur(0);
+    }
+  }
+
+  /* Trigger animasi ketika Vue set active-text */
+  .desc-item.active-text {
+    animation-play-state: running;
+    background: rgba(255, 255, 255, 0.04);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+  }
+
+  /* Inner padding wrapper — memberi ruang & border kiri kontekstual */
+  .desc-item::before {
+    content: '';
+    position: absolute;
+    left: 5%;
+    top: 0; bottom: 0;
+    width: 1px;
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      rgba(255, 188, 0, 0.2) 15%,
+      rgba(255, 188, 0, 0.2) 85%,
+      transparent 100%
+    );
+    pointer-events: none;
+  }
+
+  /* ── Sequence number (kiri atas) ── */
+  .m-card-seq {
+    display: block;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 4px;
+    color: var(--gold, #ffbc00);
+    opacity: 0.55;
+    text-transform: uppercase;
+    margin: 0 5% 20px calc(5% + 20px);
+    padding-top: 36px;
+  }
+
+  /* ── Gambar di dalam card ── */
+  .desc-item__mobile-img-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 5% 28px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+    z-index: 0;
+
+    /* Glassmorphism container untuk image */
+    background: rgba(255, 188, 0, 0.05);
+    border: 1px solid rgba(255, 188, 0, 0.10);
+    border-radius: 28px;
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.10);
+  }
+
+  /* Dekoratif glow di belakang gambar dalam card */
+  .desc-item__mobile-img-wrap::before {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    border-radius: 32px;
+    background: radial-gradient(
+      circle at 50% 45%,
+      rgba(255, 188, 0, 0.12) 0%,
+      rgba(255, 188, 0, 0.06) 24%,
+      rgba(255, 188, 0, 0.02) 44%,
+      transparent 68%
+    );
+    filter: blur(14px);
+    pointer-events: none;
+    opacity: 0.35;
+    transition: opacity 0.35s ease, transform 0.35s ease;
+    transform: scale(0.98);
+  }
+  .desc-item.active-text .desc-item__mobile-img-wrap::before {
+    opacity: 0.48;
+    transform: scale(1);
+  }
+
+  /* Ring dekoratif kecil di pojok kanan atas gambar */
+  .desc-item__mobile-img-wrap .m-card-img-ring {
+    display: block;
+    position: absolute;
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 188, 0, 0.08);
+    top: -10px; right: -10px;
+    pointer-events: none;
+    animation: rotateSlow 20s linear infinite;
+  }
+  .desc-item__mobile-img-wrap .m-card-img-ring::after {
+    content: '';
+    position: absolute;
+    inset: 8px;
+    border-radius: 50%;
+    border: 1px dashed rgba(255, 188, 0, 0.08);
+    animation: rotateSlow 28s linear infinite reverse;
+  }
+
+  /* Gambar sendiri */
+  .desc-item__mobile-img-wrap img {
+    width: auto;
+    max-width: 140px;
+    height: 140px;
+    object-fit: contain;
+    position: relative;
+    z-index: 2;
+    filter: drop-shadow(0 0 12px rgba(255, 188, 0, 0.16));
+    transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
+                filter 0.3s ease;
+  }
+  .desc-item.active-text .desc-item__mobile-img-wrap img {
+    transform: scale(1.02);
+    filter: drop-shadow(0 0 16px rgba(255, 188, 0, 0.18));
+  }
+
+  /* Crossfade transition untuk gambar dalam mobile card juga */
+  .desc-item__mobile-img-wrap .img-crossfade-enter-active {
+    transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .desc-item__mobile-img-wrap .img-crossfade-leave-active {
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  /* ── Teks judul & deskripsi ── */
+  .desc-item h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(22px, 5vw, 30px);
+    font-weight: 700;
+    color: white;
+    line-height: 1.15;
+    margin: 0 5% 12px calc(5% + 20px);
+    letter-spacing: -0.3px;
+    transition: color 0.4s ease;
+  }
+  .desc-item.active-text h3 {
+    color: white; /* tetap putih, aksen gold dari border kiri card */
+  }
+
+  .desc-item p {
+    font-size: 13.5px;
+    line-height: 1.75;
+    color: var(--text-muted, rgba(255,255,255,0.5));
+    margin: 0 5% 0 calc(5% + 20px);
+  }
+
+  /* ── Divider bawah card (gold tipis) ── */
+  .m-card-divider {
+    display: block;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent 12%,
+      rgba(255, 188, 0, 0.08) 35%,
+      rgba(255, 188, 0, 0.08) 65%,
+      transparent 88%
+    );
+    margin: 34px 5% 34px;
+  }
+
+  /* ── Active state: gold accent border kiri ── */
+  .desc-item.active-text::before {
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      var(--gold, #ffbc00) 15%,
+      var(--gold, #ffbc00) 85%,
+      transparent 100%
+    );
+    opacity: 0.6;
+  }
+  .desc-item.active-text h3 { color: white; }
+
+  /* ── Visi Misi ── */
+  .visimisi-container { padding: 50px 5% 80px; }
+  .visimisi-title { font-size: clamp(26px, 5vw, 42px); margin-bottom: 40px; letter-spacing: -0.5px; }
+  .section-divider { margin-bottom: 40px; }
+  .visi-card { padding: 40px 26px; margin-bottom: 60px; border-radius: 16px; }
+  .visi-card::before { font-size: 100px; top: -5px; left: 16px; opacity: 0.05; }
+  .visi-card p { font-size: clamp(15px, 2.2vw, 20px); }
+  .misi-grid { grid-template-columns: 1fr; gap: 14px; }
+  .misi-card { padding: 28px 26px; border-radius: 14px; }
+  .misi-card:hover { transform: translateY(-4px); }
+  .misi-number { font-size: 36px; margin-bottom: 10px; }
+  .misi-header h3 { font-size: 16px; margin-bottom: 10px; }
+  .misi-card p { font-size: 11px; line-height: 1.7; }
+}
+
+@media (max-width: 640px) {
+  .hero { min-height: 72vh; padding-top: 60px; }
+  .hero h1 { font-size: clamp(32px, 7vw, 44px); }
+  .hero-eyebrow { font-size: 9px; letter-spacing: 2px; margin-bottom: 14px; gap: 8px; }
+  .hero-eyebrow::before, .hero-eyebrow::after { width: 20px; }
+  .hero-sub { font-size: clamp(11px, 1.6vw, 13px); max-width: 95%; }
+  .hero-scroll { margin-top: 40px; font-size: 9px; gap: 6px; opacity: 0.7; }
+  .hero-scroll-line { height: 28px; }
+
+  .about-section { padding: 50px 5% 70px; }
+  .section-label { font-size: 9px; letter-spacing: 3px; gap: 8px; margin-bottom: 14px; }
+  .section-label::before { width: 14px; }
+  .about-header { margin-bottom: 38px; }
+  .about-title { font-size: clamp(24px, 5vw, 36px); margin-bottom: 14px; }
+  .about-description { font-size: 13px; }
+  .about-card { padding: 24px 20px; border-radius: 14px; }
+  .about-card-icon { width: 38px; height: 38px; font-size: 14px; margin-bottom: 16px; }
+  .about-card h3 { font-size: 16px; }
+  .about-card p  { font-size: 12px; }
+
+  /* Philosophy card adjustments at 640px */
+  .philosophy-wrapper { padding: 40px 0 60px; }
+  .philosophy-header { margin: 0 5% 44px; }
+  .philosophy-header h2 { font-size: clamp(22px, 5.5vw, 32px); }
+  .desc-item__mobile-img-wrap img { max-width: 120px; height: 120px; }
+  .desc-item h3 { font-size: clamp(20px, 4.5vw, 26px); }
+  .desc-item p  { font-size: 13px; }
+  .m-card-seq { padding-top: 30px; margin-bottom: 16px; }
+  .m-card-divider { margin: 28px 5%; }
+
+  .visimisi-container { padding: 40px 5% 60px; }
+  .visimisi-title { font-size: clamp(22px, 4.5vw, 32px); margin-bottom: 32px; }
+  .section-divider { width: 50px; margin-bottom: 36px; }
+  .visi-card { padding: 32px 20px; margin-bottom: 50px; border-radius: 14px; }
+  .visi-card::before { font-size: 80px; left: 12px; }
+  .visi-card p { font-size: clamp(13px, 2vw, 16px); }
+  .misi-card { padding: 24px 20px; border-radius: 12px; }
+  .misi-number { font-size: 32px; margin-bottom: 8px; }
+  .misi-header h3 { font-size: 14px; margin-bottom: 8px; }
+  .misi-card p { font-size: 10px; }
+}
+
+@media (max-width: 480px) {
+  .hero { min-height: 68vh; }
+  .hero h1 { font-size: clamp(28px, 6vw, 40px); }
+  .hero-eyebrow { font-size: 8px; margin-bottom: 12px; }
+  .hero-sub { font-size: 11px; }
+
+  .about-section { padding: 40px 5% 60px; }
+  .about-header { margin-bottom: 32px; }
+  .about-title { font-size: clamp(20px, 5vw, 28px); margin-bottom: 12px; }
+  .about-description { font-size: 12px; }
+  .about-card { padding: 20px 16px; }
+  .about-card-icon { width: 36px; height: 36px; font-size: 13px; }
+  .about-card h3 { font-size: 15px; }
+  .about-card p  { font-size: 11px; }
+
+  /* Philosophy card 480px */
+  .philosophy-wrapper { padding: 32px 0 50px; }
+  .philosophy-header { margin: 0 5% 38px; }
+  .philosophy-header h2 { font-size: clamp(20px, 5vw, 28px); }
+  .desc-item__mobile-img-wrap { padding: 22px; margin: 0 5% 22px; }
+  .desc-item__mobile-img-wrap img { max-width: 100px; height: 100px; }
+  .m-card-img-ring { width: 48px; height: 48px; }
+  .desc-item h3 { font-size: clamp(18px, 4vw, 22px); }
+  .desc-item p  { font-size: 12px; }
+  .m-card-seq { font-size: 9px; padding-top: 26px; margin-bottom: 14px; }
+  .m-card-divider { margin: 24px 5%; }
+
+  .visimisi-container { padding: 32px 5% 50px; }
+  .visimisi-title { font-size: clamp(20px, 4vw, 26px); margin-bottom: 28px; }
+  .section-divider { margin-bottom: 32px; }
+  .visi-card { padding: 28px 18px; margin-bottom: 40px; border-radius: 12px; }
+  .visi-card::before { font-size: 70px; left: 10px; opacity: 0.04; }
+  .visi-card p { font-size: clamp(12px, 1.8vw, 14px); }
+  .misi-card { padding: 22px 18px; border-radius: 10px; }
+  .misi-number { font-size: 28px; margin-bottom: 6px; }
+  .misi-header h3 { font-size: 13px; margin-bottom: 6px; }
+  .misi-card p { font-size: 10px; line-height: 1.65; }
+}
+
+/* ─── Minimum viable: Galaxy A series & similar ─── */
+@media (max-width: 360px) {
+  .hero h1 { font-size: clamp(26px, 5.5vw, 34px); }
+  .hero-sub { font-size: 10.5px; }
+  .hero-eyebrow { font-size: 7.5px; letter-spacing: 1.5px; }
+
+  .about-title { font-size: clamp(18px, 5vw, 24px); }
+  .about-description { font-size: 11.5px; }
+
+  .desc-item__mobile-img-wrap img { max-width: 88px; height: 88px; }
+  .desc-item h3 { font-size: 16px; }
+  .desc-item p  { font-size: 11.5px; }
+
+  .visimisi-title { font-size: clamp(18px, 4vw, 22px); }
+  .visi-card { padding: 24px 16px; }
+  .visi-card p { font-size: 11.5px; }
+  .misi-header h3 { font-size: 12px; }
+  .misi-card p { font-size: 9.5px; }
+}
+
+/* ─── Reduced motion: respect user OS preference ─── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  .img-crossfade-enter-active,
+  .img-crossfade-leave-active {
+    transition-duration: 0.15s !important;
+  }
+}

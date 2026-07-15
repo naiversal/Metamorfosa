@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Metamorfosa | BEM KM UNMUL</title>
+    <link rel="icon" href="images/emas.png" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/global.css" />
+    <link rel="stylesheet" href="css/pages/index.css" />
+  </head>
+
+  <body>
+    <div id="app">
+
+      <!-- splash screen -->
+      <div id="splash" :class="{ 'hide-splash': isLoaded }">
+        <div class="glow glow1"></div>
+        <div class="glow glow2"></div>
+        <img src="images/emas.png" alt="Logo Splash" />
+        <div class="splash-title">BEM KM UNMUL</div>
+        <h2 class="loading-text">
+          <span style="animation-delay:0s">M</span><span style="animation-delay:0.1s">e</span>
+          <span style="animation-delay:0.2s">t</span><span style="animation-delay:0.3s">a</span>
+          <span style="animation-delay:0.4s">m</span><span style="animation-delay:0.5s">o</span>
+          <span style="animation-delay:0.6s">r</span><span style="animation-delay:0.7s">f</span>
+          <span style="animation-delay:0.8s">o</span><span style="animation-delay:0.9s">s</span>
+          <span style="animation-delay:1s">a</span>
+        </h2>
+        <div class="progress-wrapper">
+          <div class="loader"><span :style="{ width: progress + '%' }"></span></div>
+          <div class="progress-text"><span>{{ progress }}</span>%</div>
+        </div>
+      </div>
+
+      <!-- navbar -->
+      <nav :class="{ shrink: isNavShrunk }">
+        <div class="nav-left">
+          <img src="images/emas.png" alt="Logo Nav" />
+        </div>
+        <div class="nav-links">
+          <a href="index.html" class="active">Beranda</a>
+          <a href="pages/profil.html">Profil</a>
+          <a href="pages/kementerian.html">Struktur</a>
+        </div>
+        <div class="nav-right">
+          <a href="https://linktr.ee/bemkm_unmul" target="_blank" rel="noopener noreferrer" class="nav-layanan">Layanan</a>
+        </div>
+        <div class="nav-hamburger" :class="{ open: isMobileMenuOpen }" @click="isMobileMenuOpen = !isMobileMenuOpen">
+          <span></span><span></span><span></span>
+        </div>
+      </nav>
+
+      <!-- mobile menu -->
+      <div class="mobile-menu" :class="{ open: isMobileMenuOpen }">
+        <a href="index.html" class="active" @click="isMobileMenuOpen = false">Beranda</a>
+        <a href="pages/profil.html" @click="isMobileMenuOpen = false">Profil</a>
+        <a href="pages/kementerian.html" @click="isMobileMenuOpen = false">Struktur</a>
+        <a href="https://linktr.ee/bemkm_unmul" target="_blank" @click="isMobileMenuOpen = false">Layanan</a>
+      </div>
+
+      <!-- HERO SECTION -->
+      <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-lines"></div>
+        <div class="hero-content" data-aos="fade-up">
+          <div class="hero-eyebrow">Kabinet Metamorfosa</div>
+          <h1>BEM KM <em>UNMUL</em></h1>
+          <p class="hero-sub">
+            Badan Eksekutif Mahasiswa Keluarga Mahasiswa
+            Universitas Mulawarman
+          </p>
+          <div class="hero-scroll">
+            <span></span>
+            <div class="hero-scroll-line"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- sambutan -->
+      <section class="sambutan" id="sambutan" data-aos="fade-up">
+        <div class="sambutan-header" data-aos="fade-up" data-aos-delay="120">
+          <div class="section-label">Kabinet Metamorfosa 2026/2027</div>
+          <h2>Sambutan <em>Pimpinan</em></h2>
+          <div class="sambutan-divider"></div>
+          <p>Pesan dan harapan dari Presiden dan Wakil Presiden BEM KM Universitas Mulawarman kepada seluruh keluarga mahasiswa.</p>
+        </div>
+
+        <div class="sambutan-grid" data-aos="fade-up">
+
+          <!-- PRESIDEN -->
+          <div class="sambutan-card" data-aos="fade-up">
+            <div class="sambutan-photo-wrap">
+              <div class="sambutan-badge">Presiden</div>
+              <!--
+                Ganti src dengan path foto presiden.
+                Contoh: src="images/presiden.jpg"
+              -->
+              <img
+                src="images/foto kementerian/bpi/Feeds.png"
+                alt="Foto Presiden BEM KM UNMUL"
+                onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+              />
+              <div class="photo-placeholder" style="display:none;">
+                <i class="fas fa-user"></i>
+                <span>Foto Presiden</span>
+              </div>
+            </div>
+            <div class="sambutan-body">
+              <div class="sambutan-name">Hiththan Hersya Putra</div>
+              <div class="sambutan-role">Presiden BEM KM UNMUL</div>
+              <!-- <span class="sambutan-quote-mark">"</span> -->
+              <p class="sambutan-quote">
+                  Assalamualaikum Wr Wb<br>
+                  Salam sejahtera bagi kita semua<br>
+                  Shalom<br>
+                  Om Swastiastu<br>
+                  Namo Bhudayya<br>
+                  Salam kebajikan<br>
+                  Rahayu<br><br>
+
+                  Hidup Mahasiswa!<br>
+                  Hidup Rakyat Indonesia!<br>
+                  Hidup perempuan yang berlawan!<br><br>
+
+                  Fyodor Mikhailovich Dostoevsky pada bukunya yang berjudul <em>The Adolescent</em>:<br>
+                  Tidak ada yang lebih sulit di dunia ini daripada mengatakan kebenaran, dan tidak ada yang lebih mudah daripada sanjungan.<br><br>
+
+                  BEM KM Unmul hari ini coba kemudian membawa semangat kebersamaan dan kekeluargaan yang berorientasi kepada perubahan dan perbaikan nyata. Hal ini dapat dilihat dari penamaan kabinet yang notabene membawa semangat perubahan dan perbaikan “Metamorfosa”.<br><br>
+
+                  Semoga dengan semangat dan pengamalan nilai ini BEM KM Unmul dapat menjadi poros ruang-ruang perubahan dan perbaikan untuk Unmul, Samarinda, Kaltim, dan Indonesia.<br><br>
+
+                  Saya teringat salah satu pesan perjuangan yang tertulis di salah satu ruang dosen saya yang berbunyi “Menjadi benar itu sulit, tetapi harus.” Lebih sulit lagi kemudian untuk menegakkan kebenaran di tengah banyaknya kemungkaran. “Tidak tunduk terdiam untuk ditindas, tapi bangkit menatap untuk melawan, karena mundur adalah sebuah pengkhianatan.”
+              </p>
+              <div class="sambutan-signature">
+                <div class="sig-info">
+                  <strong>BEM KM UNMUL</strong>
+                  Kabinet Metamorfosa 2026/2027
+                </div>
+                <div class="sig-icon"><i class="fas fa-feather-alt"></i></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- WAKIL PRESIDEN -->
+          <div class="sambutan-card" data-aos="fade-up" data-aos-delay="120">
+            <div class="sambutan-photo-wrap">
+              <div class="sambutan-badge">Wakil Presiden</div>
+              <img
+                src="images/foto kementerian/bpi/Feeds-1.png"
+                alt="Foto Wakil Presiden BEM KM UNMUL"
+                onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+              />
+              <div class="photo-placeholder" style="display:none;">
+                <i class="fas fa-user"></i>
+                <span>Foto Wakil Presiden</span>
+              </div>
+            </div>
+            <div class="sambutan-body">
+              <div class="sambutan-name">Rahmatsyah Baihaqi Hakim</div>
+              <div class="sambutan-role">Wakil Presiden BEM KM UNMUL</div>
+              <!-- <span class="sambutan-quote-mark">"</span> -->
+              <p class="sambutan-quote">
+                  Assalamualaikum Wr Wb<br>
+                  Salam sejahtera bagi kita semua<br>
+                  Shalom<br>
+                  Om Swastiastu<br>
+                  Namo Bhudayya<br>
+                  Salam kebajikan<br>
+                  Rahayu<br><br>
+
+                  Hidup Mahasiswa!<br>
+                  Hidup Rakyat Indonesia!<br>
+                  Hidup perempuan yang berlawan!<br><br>
+
+                  Fyodor Mikhailovich Dostoevsky pada bukunya yang berjudul <em>The Adolescent</em>:<br>
+                  Tidak ada yang lebih sulit di dunia ini daripada mengatakan kebenaran, dan tidak ada yang lebih mudah daripada sanjungan.<br><br>
+
+                  BEM KM Unmul hari ini coba kemudian membawa semangat kebersamaan dan kekeluargaan yang berorientasi kepada perubahan dan perbaikan nyata. Hal ini dapat dilihat dari penamaan kabinet yang notabene membawa semangat perubahan dan perbaikan “Metamorfosa”.<br><br>
+
+                  Semoga dengan semangat dan pengamalan nilai ini BEM KM Unmul dapat menjadi poros ruang-ruang perubahan dan perbaikan untuk Unmul, Samarinda, Kaltim, dan Indonesia.<br><br>
+
+                  Saya teringat salah satu pesan perjuangan yang tertulis di salah satu ruang dosen saya yang berbunyi “Menjadi benar itu sulit, tetapi harus.” Lebih sulit lagi kemudian untuk menegakkan kebenaran di tengah banyaknya kemungkaran. “Tidak tunduk terdiam untuk ditindas, tapi bangkit menatap untuk melawan, karena mundur adalah sebuah pengkhianatan.”
+              </p>
+              <div class="sambutan-signature">
+                <div class="sig-info">
+                  <strong>BEM KM UNMUL</strong>
+                  Kabinet Metamorfosa 2026/2027
+                </div>
+                <div class="sig-icon"><i class="fas fa-feather-alt"></i></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- card section -->
+      <section class="cards-section" data-aos="fade-up">
+        <div class="cards-section-header" data-aos="fade-up" data-aos-delay="120">
+          <div class="section-label">Berita &amp; Update</div>
+          <h2>Temukan <em>Berita Terbaru</em></h2>
+        </div>
+
+        <div class="cards-grid">
+          <div class="card" data-aos="fade-up">
+            <div class="card-img-wrap">
+              <img src="images/emas.png" alt="Berita Terbaru" />
+            </div>
+            <div class="card-content">
+              <h3>Berita Terbaru</h3>
+              <p>Ikuti update kegiatan terbaru kami.</p>
+              <a href="https://www.instagram.com/bemkm_unmul?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer">Lihat Selengkapnya <i class="fas fa-arrow-right"></i></a>
+            </div>
+          </div>
+
+          <div class="card" data-aos="fade-up" data-aos-delay="80">
+            <div class="card-img-wrap">
+              <img src="images/emas.png" alt="Berita Terbaru" />
+            </div>
+            <div class="card-content">
+              <h3>Berita Terbaru</h3>
+              <p>Ikuti update kegiatan terbaru kami.</p>
+              <a href="https://www.instagram.com/bemkm_unmul?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer">Lihat Selengkapnya <i class="fas fa-arrow-right"></i></a>
+            </div>
+          </div>
+
+          <div class="card" data-aos="fade-up" data-aos-delay="160">
+            <div class="card-img-wrap">
+              <img src="images/emas.png" alt="Berita Terbaru" />
+            </div>
+            <div class="card-content">
+              <h3>Berita Terbaru</h3>
+              <p>Ikuti update kegiatan terbaru kami.</p>
+              <a href="https://www.instagram.com/bemkm_unmul?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer">Lihat Selengkapnya <i class="fas fa-arrow-right"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="cards-dots" id="cardsDots"></div>
+      </section>
+
+      <!-- faq -->
+      <section class="faq" id="faq">
+        <div class="faq-header" data-aos="fade-up">
+          <div class="section-label">Pertanyaan Umum</div>
+          <h2><em>FAQ</em></h2>
+        </div>
+
+        <div class="faq-item" data-aos="fade-up">
+          <div class="faq-question">Apa itu Kabinet Metamorfosa?</div>
+          <div class="faq-answer">Metamorfosa melambangkan proses perubahan yang bertahap, terarah, dan berkelanjutan menuju organisasi yang lebih baik. Kabinet Metamorfosa hadir sebagai komitmen untuk bertumbuh, berinovasi, dan memberikan dampak nyata bagi mahasiswa Universitas Mulawarman.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">Bagaimana cara aspirasi?</div>
+          <div class="faq-answer">Isi form aspirasi di website.</div>
+        </div>
+        <div class="faq-item" data-aos="fade-up" data-aos-delay="80">
+          <div class="faq-question">Bagaimana cara aspirasi?</div>
+          <div class="faq-answer">Isi form aspirasi di website.</div>
+        </div>
+      </section>
+
+      <!-- footer -->
+      <footer>
+        <img src="images/emas.png" alt="Logo" class="footer-logo" />
+        <div class="footer-text">BEM KM UNMUL 2026/2027 • KABINET METAMORFOSA</div>
+        <div class="socials">
+          <div class="social-item">
+            <a href="https://www.instagram.com/bemkm_unmul?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer">
+              <i class="fab fa-instagram"></i>
+            </a>
+            <div class="tooltip">Instagram</div>
+          </div>
+          <div class="social-item">
+            <a href="https://www.youtube.com/@BEMKMUNMUL" target="_blank" rel="noopener noreferrer">
+              <i class="fab fa-youtube"></i>
+            </a>
+            <div class="tooltip">YouTube</div>
+          </div>
+          <div class="social-item">
+            <a href="https://web.facebook.com/bemkmunmul?_rdc=1&_rdr#" target="_blank" rel="noopener noreferrer">
+              <i class="fab fa-facebook-f"></i>
+            </a>
+            <div class="tooltip">Facebook</div>
+          </div>
+          <div class="social-item">
+            <a href="https://www.tiktok.com/@bemkm_unmul?is_from_webapp=1&sender_device=pc" target="_blank" rel="noopener noreferrer">
+              <i class="fab fa-tiktok"></i>
+            </a>
+            <div class="tooltip">Tiktok</div>
+          </div>
+        </div>
+      </footer>
+
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="js/global.js"></script>
+    <script src="js/pages/index.js"></script>
+  </body>
+</html>

@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Struktur | BEM KM UNMUL</title>
+    <link rel="icon" href="../images/emas.png" />
+    <link rel="stylesheet" href="../css/global.css" />
+    <link rel="stylesheet" href="../css/pages/kementerian.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+
+  <body>
+    <div id="app">
+      <div id="splash" :class="{ 'hide-splash': isLoaded }">
+        <div class="glow glow1"></div>
+        <div class="glow glow2"></div>
+        <img src="../images/emas.png" alt="Logo Splash" />
+        <div class="splash-title">BEM KM UNMUL</div>
+        <h2 class="loading-text">
+          <span v-for="(char, i) in 'Metamorfosa'" :key="i" :style="{ animationDelay: (i * 0.09) + 's' }">{{ char }}</span>
+        </h2>
+        <div class="progress-wrapper">
+          <div class="loader"><span :style="{ width: progress + '%' }"></span></div>
+          <div class="progress-text"><span>{{ progress }}</span>%</div>
+        </div>
+      </div>
+
+      <!-- NAVBAR -->
+      <nav :class="{ shrink: isNavShrunk }">
+        <div class="nav-left">
+          <img src="../images/emas.png" alt="Logo Nav" />
+        </div>
+        <div class="nav-links">
+          <a href="../index.html">Beranda</a>
+          <a href="profil.html">Profil</a>
+          <a href="kementerian.html" class="active">Struktur</a>
+        </div>
+        <div class="nav-right">
+          <a href="https://linktr.ee/bemkm_unmul" target="_blank" rel="noopener noreferrer" class="nav-layanan">Layanan</a>
+        </div>
+        <div class="nav-hamburger" :class="{ open: isMobileMenuOpen }" @click="isMobileMenuOpen = !isMobileMenuOpen">
+          <span></span><span></span><span></span>
+        </div>
+      </nav>
+
+      <div class="mobile-menu" :class="{ open: isMobileMenuOpen }">
+        <a href="../index.html" @click="isMobileMenuOpen = false">Beranda</a>
+        <a href="profil.html" @click="isMobileMenuOpen = false">Profil</a>
+        <a href="kementerian.html" class="active" @click="isMobileMenuOpen = false">Struktur</a>
+        <a href="https://linktr.ee/bemkm_unmul" target="_blank" @click="isMobileMenuOpen = false">Layanan</a>
+      </div>
+
+      <!-- HERO -->
+      <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-lines"></div>
+        <div class="hero-content">
+          <div class="hero-eyebrow">Kabinet Metamorfosa</div>
+          <h1>Struktur <em>Kabinet</em></h1>
+          <p class="hero-sub">Struktur organisasi BEM KM Universitas Mulawarman 2026/2027</p>
+        </div>
+      </section>
+
+      <div class="ministry-container">
+
+        <div class="section-header" data-aos="fade-up">
+          <div class="section-label">Struktur Pimpinan</div>
+          <h2 class="section-title">Badan Pengurus Inti & Staff Ahli</h2>
+          <div class="section-divider"></div>
+        </div>
+
+        <div class="bpi-staff-grid" data-aos="fade-up" data-aos-delay="100">
+          <a href="kementerian/detail-bpi.html" class="ministry-card-glass link-wrapper">
+            <div class="ministry-photo-wrapper">
+              <img src="../images/bpi.png" alt="Badan Pengurus Inti" @error="handleImageError" />
+            </div>
+
+            <div class="card-content">
+              <div class="card-text">
+                <h3>Badan Pengurus Inti (BPI)</h3>
+              </div>
+            </div>
+          </a>
+
+          <a href="kementerian/detail-staffahli.html" class="ministry-card-glass link-wrapper">
+            <div class="ministry-photo-wrapper">
+              <img src="../images/staffahli.png" alt="Staff Ahli" @error="handleImageError" />
+            </div>
+            <div class="card-content">
+              <div class="card-text">
+                <!-- <span class="card-badge">Tenaga Ahli</span> -->
+                <h3>Staff Ahli</h3>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <div class="section-header" data-aos="fade-up">
+          <h2 class="section-title">Kementerian & Inspektorat</h2>
+          <div class="section-divider"></div>
+        </div>
+
+        <div class="ministry-grid">
+          <div
+            v-for="(kementrian, index) in daftarKementerian"
+            :key="index"
+            class="ministry-card-glass"
+            data-aos="fade-up"
+            :data-aos-delay="(index % 3) * 80"
+          >
+            <a v-if="kementrian.link" :href="kementrian.link" class="link-wrapper">
+              <div class="ministry-photo-wrapper">
+                <img :src="kementrian.img" :alt="kementrian.name" @error="handleImageError" />
+              </div>
+              <div class="card-content">
+                <div class="card-text">
+                  <h3>{{ kementrian.name }}</h3>
+                </div>
+                <div class="card-arrow"><i class="fas fa-arrow-right"></i></div>
+              </div>
+            </a>
+            <div v-else class="link-wrapper">
+              <div class="ministry-photo-wrapper">
+                <img :src="kementrian.img" :alt="kementrian.name" @error="handleImageError" />
+              </div>
+              <div class="card-content">
+                <div class="card-text">
+                  <h3>{{ kementrian.name }}</h3>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FOOTER -->
+      <footer>
+        <img src="../images/emas.png" alt="Logo" class="footer-logo" />
+        <div class="footer-text">BEM KM UNMUL 2026/2027 • KABINET METAMORFOSA</div>
+        <div class="socials">
+          <div class="social-item">
+            <a href="https://www.instagram.com/bemkm_unmul?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-instagram"></i></a>
+            <div class="tooltip">Instagram</div>
+          </div>
+          <div class="social-item">
+            <a href="https://www.youtube.com/@BEMKMUNMUL" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-youtube"></i></a>
+            <div class="tooltip">YouTube</div>
+          </div>
+          <div class="social-item">
+            <a href="https://web.facebook.com/bemkmunmul?_rdc=1&_rdr#" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-facebook-f"></i></a>
+            <div class="tooltip">Facebook</div>
+          </div>
+          <div class="social-item">
+            <a href="https://www.tiktok.com/@bemkm_unmul?is_from_webapp=1&sender_device=pc" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-tiktok"></i></a>
+            <div class="tooltip">Tiktok</div>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="../js/global.js"></script>
+    <script src="../js/pages/kementerian.js"></script>
+  </body>
+</html>
