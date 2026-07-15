@@ -336,6 +336,7 @@
 .ministry-card-glass:hover,
 .ministry-card-glass:focus-within {
     transform: translateY(-8px);
+    z-index: 2;
     border-color: rgba(255, 188, 0, 0.28);
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55), 0 0 0 1px var(--gold-dim);
 }
