@@ -115,11 +115,10 @@
               <div class="ministry-photo-wrapper">
                 <img :src="kementrian.img" :alt="kementrian.name" @error="handleImageError" />
               </div>
-              <div class="card-content">
+                <div class="card-content">
                 <div class="card-text">
                   <h3>{{ kementrian.name }}</h3>
                 </div>
-                <div class="card-arrow"><i class="fas fa-arrow-right"></i></div>
               </div>
             </a>
             <div v-else class="link-wrapper">
