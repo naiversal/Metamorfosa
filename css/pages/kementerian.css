@@ -328,19 +328,27 @@
     display: flex;
     flex-direction: column;
     height: 100%;
+    width: 100%;
     position: relative;
     z-index: 1;
 }
 
-.link-wrapper:hover {
-
-}
-
-.ministry-card-glass:has(.link-wrapper:hover),
-.ministry-card-glass:hover {
+.ministry-card-glass:hover,
+.ministry-card-glass:focus-within {
     transform: translateY(-8px);
     border-color: rgba(255, 188, 0, 0.28);
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55), 0 0 0 1px var(--gold-dim);
+}
+
+.ministry-card-glass:hover .ministry-photo-wrapper img,
+.ministry-card-glass:focus-within .ministry-photo-wrapper img {
+    transform: scale(1.07);
+    filter: brightness(1.05) saturate(1.1);
+}
+
+.ministry-card-glass:hover .card-content h3,
+.ministry-card-glass:focus-within .card-content h3 {
+    color: white;
 }
 
 /* Removed .card-arrow styles because the circular icon was removed from HTML */
