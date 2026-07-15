@@ -341,6 +341,12 @@
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55), 0 0 0 1px var(--gold-dim);
 }
 
+.bpi-staff-grid .ministry-card-glass:hover,
+.bpi-staff-grid .ministry-card-glass:focus-within {
+    transform: none;
+    box-shadow: none;
+}
+
 .ministry-card-glass:hover .ministry-photo-wrapper img,
 .ministry-card-glass:focus-within .ministry-photo-wrapper img {
     transform: scale(1.07);
@@ -351,8 +357,6 @@
 .ministry-card-glass:focus-within .card-content h3 {
     color: white;
 }
-
-/* Removed .card-arrow styles because the circular icon was removed from HTML */
 
 footer {
     background: #070707;
